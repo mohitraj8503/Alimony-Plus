@@ -5,3 +5,9 @@ frontend/.env*
 frontend/test-results/
 frontend/playwright-report/
 frontend/*.tsbuildinfo
+
+# Python / local env (added in cleanup)
+__pycache__/
+*.pyc
+.pytest_cache/
+/.env
