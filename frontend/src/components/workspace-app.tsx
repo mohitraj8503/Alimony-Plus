@@ -84,6 +84,8 @@ export function WorkspaceApp({ section }: { section: string }) {
   const [editSource, setEditSource] = useState<SourceRecord>();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
+  const [startDate, setStartDate] = useState("");
+const [endDate, setEndDate] = useState("");
   const router = useRouter();
   useEffect(() => {
     setSearch("");
@@ -966,6 +968,41 @@ export function WorkspaceApp({ section }: { section: string }) {
                     ),
                   )}
                 </div>
+                
+<div className="date-filters">
+  <label>
+    From date
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+      aria-label="Filter ledger from date"
+    />
+  </label>
+
+  <label>
+    To date
+    <input
+      type="date"
+      value={endDate}
+      min={startDate || undefined}
+      onChange={(e) => setEndDate(e.target.value)}
+      aria-label="Filter ledger to date"
+    />
+  </label>
+
+  <button
+    type="button"
+    onClick={() => {
+      setStartDate("");
+      setEndDate("");
+    }}
+    disabled={!startDate && !endDate}
+  >
+    Clear dates
+  </button>
+</div>
+
                 <CaseSelector
                   selected={selectedCase}
                   setSelected={setSelectedCase}
@@ -985,9 +1022,24 @@ export function WorkspaceApp({ section }: { section: string }) {
                 </div>
                 {demo ? (
                   <LedgerTable
-                    rows={ledger.filter(
-                      (r) => filter === "All" || r.status === filter,
-                    )}
+                  
+rows={ledger.filter((r) => {
+  const matchesStatus =
+    filter === "All" || r.status === filter;
+
+  const matchesStartDate =
+    !startDate || r.dueDate >= startDate;
+
+  const matchesEndDate =
+    !endDate || r.dueDate <= endDate;
+
+  return (
+    matchesStatus &&
+    matchesStartDate &&
+    matchesEndDate
+  );
+})}
+
                   />
                 ) : (
                   <Empty title="Monthly reconciliation is not available yet">
