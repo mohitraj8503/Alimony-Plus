@@ -116,3 +116,20 @@
   .f-stage { animation: none; }
   .f-bar-fill, .f-btn { transition: none; }
 }
+.f-review { margin: 0 0 16px; display: grid; gap: 4px; }
+.f-review-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.f-review-row dt { font-weight: 600; }
+.f-review-row dd { margin: 2px 0 0; color: var(--muted); overflow-wrap: anywhere; }
+.f-link-btn { background: none; border: 0; color: var(--green); font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; min-height: 44px; padding: 0 8px; }
+.f-checks { display: grid; gap: 4px; }
+.f-check { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.f-check input { width: 20px; height: 20px; accent-color: var(--green); }
+.f-ok { background: var(--green-light); border-radius: 10px; padding: 10px 14px; font-weight: 600; margin: 0 0 16px; }
+
+@media print {
+  .f-top, .f-title, .f-notice, .f-progress, .f-tabs, .f-form-col, .f-preview-title { display: none !important; }
+  .filing { background: #fff; padding: 0; min-height: 0; }
+  .f-grid { display: block; }
+  .f-preview-col { display: block !important; }
+  .f-paper { border: 0; box-shadow: none; position: static; max-height: none; overflow: visible; padding: 0; }
+}

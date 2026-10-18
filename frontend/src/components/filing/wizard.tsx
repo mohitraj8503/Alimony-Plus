@@ -8,6 +8,10 @@ import { isStageValid, validateStage } from "@/lib/filing/validation";
 import { AffidavitPreview } from "./preview";
 import { Progress } from "./progress";
 import { StageParties } from "./stage-parties";
+import { StageCourt } from "./stage-court";
+import { StageQuestions } from "./stage-questions";
+import { StageFinancial } from "./stage-financial";
+import { StageReview } from "./stage-review";
 import { StageRole } from "./stage-role";
 import { useFilingDraft } from "./use-filing-draft";
 
@@ -146,7 +150,22 @@ export function Wizard() {
             {stage === 2 ? (
               <StageParties parties={draft.parties} errors={errors} dispatch={dispatch} />
             ) : null}
-            {stage > 2 ? (
+            {stage === 3 ? (
+              <StageCourt
+                court={draft.court}
+                causeOfAction={draft.causeOfAction}
+                errors={errors}
+                dispatch={dispatch}
+              />
+            ) : null}
+            {stage === 4 ? (
+              <StageQuestions draft={draft} errors={errors} dispatch={dispatch} />
+            ) : null}
+            {stage === 5 ? (
+              <StageFinancial financial={draft.financial} errors={errors} dispatch={dispatch} />
+            ) : null}
+            {stage === 6 ? <StageReview draft={draft} onEdit={go} /> : null}
+            {stage > 6 ? (
               <p className="f-placeholder">This stage is built in the next step of the project.</p>
             ) : null}
           </div>
