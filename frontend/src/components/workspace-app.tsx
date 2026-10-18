@@ -38,6 +38,17 @@ import { Badge, Empty, PageHeading, ExternalLink } from "./ui";
 import { RecordDialog, type DialogKind } from "./record-dialog";
 import { buildLedger, dateLabel, downloadJson, money } from "@/lib/ledger";
 import type { LedgerRow, SourceRecord } from "@/lib/types";
+import { buildArrears } from "@/lib/arrears";
+import {
+  arrearsToCsv,
+  downloadCsv,
+  ledgerToCsv,
+  paymentsToCsv,
+} from "@/lib/export";
+import { buildExhibitPdf } from "@/lib/exhibit";
+import { downloadPdf } from "@/lib/pdf";
+import { ArrearsTable } from "./arrears-table";
+import { ReceiptActions, VerifyReceiptButton } from "./receipts";
 import {
   CalculatorView,
   DataReviewView,
@@ -84,12 +95,14 @@ export function WorkspaceApp({ section }: { section: string }) {
   const [editSource, setEditSource] = useState<SourceRecord>();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
-  const [startDate, setStartDate] = useState("");
-const [endDate, setEndDate] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const router = useRouter();
   useEffect(() => {
     setSearch("");
     setFilter("All");
+    setFromDate("");
+    setToDate("");
     setMenuOpen(false);
   }, [section]);
   useEffect(() => {
@@ -144,6 +157,13 @@ const [endDate, setEndDate] = useState("");
     orders.some((o) => o.id === p.orderId),
   );
   const ledger = buildLedger(orders, payments, asOf);
+  const visibleLedger = ledger.filter(
+    (r) =>
+      (filter === "All" || r.status === filter) &&
+      (!fromDate || r.dueDate >= fromDate) &&
+      (!toDate || r.dueDate <= toDate),
+  );
+  const arrears = buildArrears(ledger, asOf, undefined, payments);
   const overdue = ledger
     .filter((r) => r.dueDate < asOf)
     .reduce((sum, r) => sum + r.outstanding, 0);
@@ -902,6 +922,56 @@ const [endDate, setEndDate] = useState("");
                   <Download size={16} />
                   Export ledger
                 </button>
+                {demo && (
+                  <button
+                    className="button secondary"
+                    onClick={() =>
+                      downloadCsv("alimony-plus-ledger.csv", ledgerToCsv(visibleLedger))
+                    }
+                  >
+                    <Download size={16} />
+                    Ledger CSV
+                  </button>
+                )}
+                {demo && (
+                  <>
+                    <button
+                      className="button secondary"
+                      onClick={() =>
+                        downloadCsv("alimony-plus-arrears.csv", arrearsToCsv(arrears))
+                      }
+                    >
+                      <Download size={16} />
+                      Arrears CSV
+                    </button>
+                    <button
+                      className="button secondary"
+                      onClick={async () => {
+                        const { bytes } = await buildExhibitPdf({
+                          asOf,
+                          synthetic: demo,
+                          orders,
+                          ledger,
+                          arrears,
+                          payments,
+                        });
+                        downloadPdf("alimony-plus-court-exhibit.pdf", bytes);
+                      }}
+                    >
+                      <Download size={16} />
+                      Court exhibit PDF
+                    </button>
+                  </>
+                )}
+                <button
+                  className="button secondary"
+                  onClick={() =>
+                    downloadCsv("alimony-plus-payments.csv", paymentsToCsv(payments))
+                  }
+                >
+                  <Download size={16} />
+                  Payments CSV
+                </button>
                 <button
                   className="button primary"
                   onClick={() => open("payment")}
@@ -968,46 +1038,46 @@ const [endDate, setEndDate] = useState("");
                     ),
                   )}
                 </div>
-                
-<div className="date-filters">
-  <label>
-    From date
-    <input
-      type="date"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-      aria-label="Filter ledger from date"
-    />
-  </label>
-
-  <label>
-    To date
-    <input
-      type="date"
-      value={endDate}
-      min={startDate || undefined}
-      onChange={(e) => setEndDate(e.target.value)}
-      aria-label="Filter ledger to date"
-    />
-  </label>
-
-  <button
-    type="button"
-    onClick={() => {
-      setStartDate("");
-      setEndDate("");
-    }}
-    disabled={!startDate && !endDate}
-  >
-    Clear dates
-  </button>
-</div>
-
                 <CaseSelector
                   selected={selectedCase}
                   setSelected={setSelectedCase}
                 />
               </div>
+              {demo && (
+                <div className="mb-4 flex flex-wrap items-end gap-4">
+                  <div className="field">
+                    <label htmlFor="ledger-from">Due from</label>
+                    <input
+                      id="ledger-from"
+                      type="date"
+                      value={fromDate}
+                      max={toDate || undefined}
+                      onChange={(e) => setFromDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="ledger-to">Due until</label>
+                    <input
+                      id="ledger-to"
+                      type="date"
+                      value={toDate}
+                      min={fromDate || undefined}
+                      onChange={(e) => setToDate(e.target.value)}
+                    />
+                  </div>
+                  {(fromDate || toDate) && (
+                    <button
+                      className="button secondary compact"
+                      onClick={() => {
+                        setFromDate("");
+                        setToDate("");
+                      }}
+                    >
+                      Clear dates
+                    </button>
+                  )}
+                </div>
+              )}
               <section className="panel table-panel">
                 <div className="panel-heading">
                   <div>
@@ -1021,26 +1091,7 @@ const [endDate, setEndDate] = useState("");
                   <span className="overline">INR (₹)</span>
                 </div>
                 {demo ? (
-                  <LedgerTable
-                  
-rows={ledger.filter((r) => {
-  const matchesStatus =
-    filter === "All" || r.status === filter;
-
-  const matchesStartDate =
-    !startDate || r.dueDate >= startDate;
-
-  const matchesEndDate =
-    !endDate || r.dueDate <= endDate;
-
-  return (
-    matchesStatus &&
-    matchesStartDate &&
-    matchesEndDate
-  );
-})}
-
-                  />
+                  <LedgerTable rows={visibleLedger} />
                 ) : (
                   <Empty title="Monthly reconciliation is not available yet">
                     You can record and view individual payments below. Missing
@@ -1048,12 +1099,28 @@ rows={ledger.filter((r) => {
                   </Empty>
                 )}
               </section>
+              {demo && (
+                <section className="panel table-panel mt-6">
+                  <div className="panel-heading">
+                    <div>
+                      <h2>Arrears &amp; interest</h2>
+                      <p>
+                        Unpaid amounts past their due date. Interest is shown
+                        only once the project’s approved rule is configured.
+                      </p>
+                    </div>
+                    <span className="overline">INR (₹)</span>
+                  </div>
+                  <ArrearsTable rows={arrears} />
+                </section>
+              )}
               <section className="panel table-panel mt-6">
                 <div className="panel-heading">
                   <div>
                     <h2>Payment history</h2>
                     <p>Your individual payment records and references.</p>
                   </div>
+                  <VerifyReceiptButton />
                 </div>
                 {payments.length ? (
                   <div className="table-scroll">
@@ -1065,6 +1132,8 @@ rows={ledger.filter((r) => {
                           <th>Reference</th>
                           <th>Amount</th>
                           <th>Status</th>
+                          <th>Proof</th>
+                          <th>Receipt</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1086,6 +1155,21 @@ rows={ledger.filter((r) => {
                                 >
                                   {p.status.toLowerCase()}
                                 </Badge>
+                              </td>
+                              <td>
+                                {p.proof ? (
+                                  <>
+                                    {p.proof.fileName}
+                                    <small>
+                                      SHA-256 {p.proof.sha256.slice(0, 12)}…
+                                    </small>
+                                  </>
+                                ) : (
+                                  "None attached"
+                                )}
+                              </td>
+                              <td>
+                                <ReceiptActions payment={p} asOf={asOf} />
                               </td>
                             </tr>
                           ))}
