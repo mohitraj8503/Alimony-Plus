@@ -224,7 +224,7 @@ export function WorkspaceApp({ section }: { section: string }) {
           </span>
           <div>
             My workspace
-            <small>{demo ? "Personal · Demo" : "Personal · Connected"}</small>
+            <small>{demo ? "Personal ┬╖ Demo" : "Personal ┬╖ Connected"}</small>
           </div>
           <ChevronDown size={14} />
         </div>
@@ -270,7 +270,7 @@ export function WorkspaceApp({ section }: { section: string }) {
               <Leaf size={20} />
             </span>
             <h3>
-              You don’t have to
+              You donΓÇÖt have to
               <br />
               figure it out alone.
             </h3>
@@ -334,7 +334,7 @@ export function WorkspaceApp({ section }: { section: string }) {
             {demo ? (
               <>
                 Demo workspace <span className="banner-separator">/</span>{" "}
-                Synthetic records · As of 9 Oct 2026 · Changes clear on refresh
+                Synthetic records ┬╖ As of 9 Oct 2026 ┬╖ Changes clear on refresh
               </>
             ) : (
               <>
@@ -374,7 +374,7 @@ export function WorkspaceApp({ section }: { section: string }) {
           )}
           {store.loading && (
             <div role="status" className="loading-strip">
-              Loading your case records…
+              Loading your case recordsΓÇª
             </div>
           )}
           {section === "dashboard" && (
@@ -382,7 +382,7 @@ export function WorkspaceApp({ section }: { section: string }) {
               <PageHeading
                 eyebrow="A LITTLE CLARITY, EVERY DAY"
                 title={`Good morning, ${name.split(" ")[0]}.`}
-                description="Your journey, a little more organised. Here’s where things stand."
+                description="Your journey, a little more organised. HereΓÇÖs where things stand."
               >
                 <button className="button secondary" onClick={exportSummary}>
                   <Download size={16} />
@@ -424,7 +424,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                 />
                 <Stat
                   label="Outstanding balance"
-                  value={demo ? money(overdue) : "—"}
+                  value={demo ? money(overdue) : "ΓÇö"}
                   detail={
                     demo
                       ? `${ledger.filter((r) => r.dueDate < asOf && r.outstanding > 0).length} periods need your attention`
@@ -458,7 +458,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                       <p>Every payment. A little more peace of mind.</p>
                     </div>
                     <span className="period-label">
-                      {demo ? "Jun – Oct 2026" : "Recorded history"}
+                      {demo ? "Jun ΓÇô Oct 2026" : "Recorded history"}
                     </span>
                   </div>
                   {demo && ledger.length ? (
@@ -544,7 +544,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                           </small>
                           <span className="case-meta">
                             Opened {dateLabel(c.createdAt)}
-                            <span>·</span>
+                            <span>┬╖</span>
                             {
                               data.proceedings.filter((p) => p.caseId === c.id)
                                 .length
@@ -578,7 +578,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                   <div className="panel-heading">
                     <div>
                       <h2>Recent activity</h2>
-                      <p>A record of the steps you’ve taken.</p>
+                      <p>A record of the steps youΓÇÖve taken.</p>
                     </div>
                     <Clock3 size={17} className="muted" />
                   </div>
@@ -601,7 +601,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                                   : `Payment ${p.status.toLowerCase()}`}
                               </strong>
                               <p>
-                                {money(p.amount)} · Order #{p.orderId}
+                                {money(p.amount)} ┬╖ Order #{p.orderId}
                               </p>
                               <small>{dateLabel(p.paymentDate)}</small>
                             </div>
@@ -618,11 +618,11 @@ export function WorkspaceApp({ section }: { section: string }) {
               <div className="gentle-note">
                 <Leaf size={17} />
                 <span>
-                  Progress doesn’t have to happen all at once. You’re taking the
+                  Progress doesnΓÇÖt have to happen all at once. YouΓÇÖre taking the
                   next step.
                 </span>
                 <Link href="/help">
-                  We’re here to help <ArrowUpRight size={14} />
+                  WeΓÇÖre here to help <ArrowUpRight size={14} />
                 </Link>
               </div>
             </>
@@ -674,7 +674,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                         </div>
                         <h2>{c.title}</h2>
                         <p className="muted">
-                          Opened {dateLabel(c.createdAt)} · Case #{c.id}
+                          Opened {dateLabel(c.createdAt)} ┬╖ Case #{c.id}
                         </p>
                         <div className="case-section">
                           <p className="eyebrow">PROCEEDINGS</p>
@@ -689,7 +689,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                                   <p>{p.courtName}</p>
                                   <small>
                                     {p.caseNumber || "No case number recorded"}{" "}
-                                    · Filed {dateLabel(p.filedAt)}
+                                    ┬╖ Filed {dateLabel(p.filedAt)}
                                   </small>
                                 </div>
                               </div>
@@ -731,7 +731,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                                 <span className="timeline-dot" />
                                 <div>
                                   <strong>
-                                    {o.orderType || "Court order"} ·{" "}
+                                    {o.orderType || "Court order"} ┬╖{" "}
                                     {money(o.amount)}
                                   </strong>
                                   <small>{dateLabel(o.orderDate)}</small>
@@ -746,7 +746,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                                 <div>
                                   <strong>{h.title}</strong>
                                   <small>
-                                    {dateLabel(h.date)} · {h.location}
+                                    {dateLabel(h.date)} ┬╖ {h.location}
                                   </small>
                                 </div>
                               </div>
@@ -894,7 +894,7 @@ export function WorkspaceApp({ section }: { section: string }) {
               <PageHeading
                 eyebrow="MAINTENANCE TRACKER"
                 title="A clearer picture of your support."
-                description="Record payments, understand what’s outstanding, and prepare your next step."
+                description="Record payments, understand whatΓÇÖs outstanding, and prepare your next step."
               >
                 <button className="button secondary" onClick={exportSummary}>
                   <Download size={16} />
@@ -981,7 +981,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                         : "Schedules and period allocations are not yet available."}
                     </p>
                   </div>
-                  <span className="overline">INR (₹)</span>
+                  <span className="overline">INR (Γé╣)</span>
                 </div>
                 {demo ? (
                   <LedgerTable
@@ -1042,7 +1042,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                   </div>
                 ) : (
                   <Empty title="No payments recorded">
-                    Use “Log payment” when you receive a payment.
+                    Use ΓÇ£Log paymentΓÇ¥ when you receive a payment.
                   </Empty>
                 )}
               </section>
@@ -1088,8 +1088,8 @@ export function WorkspaceApp({ section }: { section: string }) {
                         <div>
                           <strong>{doc.originalName}</strong>
                           <small>
-                            {doc.documentType} ·{" "}
-                            {Math.ceil(doc.fileSize / 1024)} KB ·{" "}
+                            {doc.documentType} ┬╖{" "}
+                            {Math.ceil(doc.fileSize / 1024)} KB ┬╖{" "}
                             {dateLabel(doc.createdAt)}
                           </small>
                         </div>
@@ -1122,7 +1122,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                     ))
                   ) : (
                     <Empty title="No documents in this view">
-                      Add relevant records when you’re ready.
+                      Add relevant records when youΓÇÖre ready.
                     </Empty>
                   )}
                   <div className="panel-footnote">
@@ -1167,7 +1167,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                           <strong>{category}</strong>
                           <small>
                             {done
-                              ? "Record added · not verified"
+                              ? "Record added ┬╖ not verified"
                               : "Add if relevant and available"}
                           </small>
                         </div>
@@ -1200,7 +1200,7 @@ export function WorkspaceApp({ section }: { section: string }) {
               confidence.
             </span>
             <span>
-              Information & organisation tools · A qualified professional guides
+              Information & organisation tools ┬╖ A qualified professional guides
               legal decisions.
             </span>
           </footer>
@@ -1332,7 +1332,7 @@ function PaymentChart({ ledger }: { ledger: LedgerRow[] }) {
       <div className="chart-y">
         <span>{money(max).replace(".00", "")}</span>
         <span>{money(max / 2)}</span>
-        <span>₹0</span>
+        <span>Γé╣0</span>
       </div>
       <div className="plot">
         <div className="grid-line top" />
