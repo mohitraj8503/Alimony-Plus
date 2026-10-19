@@ -45,11 +45,20 @@ import {
   LoginView,
   SettingsView,
 } from "./workspace-extras";
+import {
+  CaseMilestones,
+  CauseListCalendar,
+  CourtAlerts,
+  EvidenceViewer,
+} from "./workspace-tools";
+import { DEMO_MILESTONES } from "@/lib/demo";
 
 const nav = [
   { id: "dashboard", title: "Overview", icon: LayoutDashboard },
   { id: "cases", title: "My cases", icon: FolderHeart },
+  { id: "calendar", title: "Cause list", icon: CalendarDays },
   { id: "orders", title: "Court orders", icon: Scale },
+  { id: "alerts", title: "Alerts", icon: Bell },
   { id: "payments", title: "Maintenance", icon: Wallet },
   { id: "documents", title: "Documents", icon: Files },
   { id: "calculator", title: "Planning calculator", icon: Calculator },
@@ -57,7 +66,9 @@ const nav = [
 const pageTitles: Record<string, string> = {
   dashboard: "Overview",
   cases: "My cases",
+  calendar: "Cause list calendar",
   orders: "Court orders",
+  alerts: "Court & maintenance alerts",
   payments: "Maintenance",
   documents: "Documents",
   calculator: "Planning calculator",
@@ -77,6 +88,8 @@ export function WorkspaceApp({ section }: { section: string }) {
     setNotice,
     selectedCase,
     setSelectedCase,
+    caseNotes,
+    setCaseNote,
   } = store;
   const sidebarRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -151,6 +164,9 @@ export function WorkspaceApp({ section }: { section: string }) {
   const hearings = data.hearings
     .filter((h) => cases.some((c) => c.id === h.caseId) && h.date >= asOf)
     .sort((a, b) => a.date.localeCompare(b.date));
+  const allHearings = data.hearings.filter((h) =>
+    cases.some((c) => c.id === h.caseId),
+  );
   const documents = data.documents.filter((d) =>
     cases.some((c) => c.id === d.caseId),
   );
@@ -704,54 +720,20 @@ export function WorkspaceApp({ section }: { section: string }) {
                             </p>
                           )}
                         </div>
-                        <div className="case-section">
-                          <p className="eyebrow">CASE TIMELINE</p>
-                          <div className="timeline-row">
-                            <span className="timeline-dot" />
-                            <div>
-                              <strong>Case record created</strong>
-                              <small>{dateLabel(c.createdAt)}</small>
-                            </div>
-                          </div>
-                          {ps.map((p) => (
-                            <div className="timeline-row" key={p.id}>
-                              <span className="timeline-dot" />
-                              <div>
-                                <strong>Proceeding recorded</strong>
-                                <small>{dateLabel(p.filedAt)}</small>
-                              </div>
-                            </div>
-                          ))}
-                          {data.orders
-                            .filter((o) =>
-                              ps.some((p) => p.id === o.proceedingId),
-                            )
-                            .map((o) => (
-                              <div className="timeline-row" key={o.id}>
-                                <span className="timeline-dot" />
-                                <div>
-                                  <strong>
-                                    {o.orderType || "Court order"} ·{" "}
-                                    {money(o.amount)}
-                                  </strong>
-                                  <small>{dateLabel(o.orderDate)}</small>
-                                </div>
-                              </div>
-                            ))}
-                          {data.hearings
-                            .filter((h) => h.caseId === c.id)
-                            .map((h) => (
-                              <div className="timeline-row upcoming" key={h.id}>
-                                <span className="timeline-dot" />
-                                <div>
-                                  <strong>{h.title}</strong>
-                                  <small>
-                                    {dateLabel(h.date)} · {h.location}
-                                  </small>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
+                        <CaseMilestones
+                          caseRecord={c}
+                          proceedings={ps}
+                          orders={data.orders.filter((o) =>
+                            ps.some((p) => p.id === o.proceedingId),
+                          )}
+                          hearings={data.hearings.filter(
+                            (hearing) => hearing.caseId === c.id,
+                          )}
+                          asOf={asOf}
+                          synthetic={demo && c.id === 1 ? DEMO_MILESTONES : []}
+                          notes={caseNotes[c.id] || ""}
+                          onNotesChange={(value) => setCaseNote(c.id, value)}
+                        />
                         <div className="case-actions">
                           <button
                             className="text-link"
@@ -793,6 +775,23 @@ export function WorkspaceApp({ section }: { section: string }) {
                 </p>
               )}
             </>
+          )}
+          {section === "calendar" && (
+            <CauseListCalendar
+              hearings={allHearings}
+              cases={cases}
+              asOf={asOf}
+              synthetic={demo}
+            />
+          )}
+          {section === "alerts" && (
+            <CourtAlerts
+              orders={orders}
+              payments={payments}
+              ledger={ledger}
+              asOf={asOf}
+              synthetic={demo}
+            />
           )}
           {section === "orders" && (
             <>
@@ -1080,46 +1079,7 @@ export function WorkspaceApp({ section }: { section: string }) {
                     />
                   </div>
                   {documents.length ? (
-                    documents.map((doc) => (
-                      <div className="document-row" key={doc.id}>
-                        <span className="file-icon">
-                          <FileText size={23} strokeWidth={1.5} />
-                        </span>
-                        <div>
-                          <strong>{doc.originalName}</strong>
-                          <small>
-                            {doc.documentType} ·{" "}
-                            {Math.ceil(doc.fileSize / 1024)} KB ·{" "}
-                            {dateLabel(doc.createdAt)}
-                          </small>
-                        </div>
-                        <button
-                          className="icon-button"
-                          disabled={demo && !doc.file}
-                          aria-label={`Download ${doc.originalName}`}
-                          title={
-                            demo && !doc.file
-                              ? "Illustrative record; no file attached"
-                              : "Download document"
-                          }
-                          onClick={() => {
-                            if (doc.file) {
-                              const url = URL.createObjectURL(doc.file);
-                              const a = document.createElement("a");
-                              a.href = url;
-                              a.download = doc.originalName;
-                              a.click();
-                              setTimeout(() => URL.revokeObjectURL(url), 1000);
-                            } else
-                              window.location.assign(
-                                `/api/backend/documents/${doc.id}/download`,
-                              );
-                          }}
-                        >
-                          <Download size={17} />
-                        </button>
-                      </div>
-                    ))
+                    <EvidenceViewer documents={documents} demo={demo} />
                   ) : (
                     <Empty title="No documents in this view">
                       Add relevant records when you’re ready.

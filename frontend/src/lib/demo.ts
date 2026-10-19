@@ -1,5 +1,36 @@
-import type { Workspace } from "./types";
+import type { Milestone, Workspace } from "./types";
 export const DEMO_DATE = "2026-10-09";
+export const DEMO_MILESTONES: Milestone[] = [
+  {
+    title: "Filing",
+    date: "2026-04-12",
+    detail: "Illustrative petition filing",
+  },
+  {
+    title: "Summons",
+    date: "2026-04-20",
+    detail: "Illustrative notice date",
+  },
+  {
+    title: "Written Statement",
+    date: "2026-05-12",
+    detail: "Illustrative response date",
+  },
+  {
+    title: "Interim Relief",
+    date: "2026-05-22",
+    detail: "Illustrative interim order",
+  },
+  {
+    title: "Evidence",
+    detail: "Awaiting evidence-stage date",
+  },
+  {
+    title: "Final Arguments",
+    detail: "Awaiting arguments-stage date",
+  },
+];
+
 export function demoWorkspace(): Workspace {
   return {
     cases: [

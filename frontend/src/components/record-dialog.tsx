@@ -106,6 +106,7 @@ export function RecordDialog({
               title: str("title"),
               date: str("date"),
               location: str("location"),
+              type: str("type") === "summons" ? "summons" : "hearing",
             },
           ],
         }));
@@ -395,6 +396,12 @@ export function RecordDialog({
         )}
         {kind === "hearing" && (
           <>
+            <Field label="Event type">
+              <select name="type" defaultValue="hearing">
+                <option value="hearing">Hearing</option>
+                <option value="summons">Summons return</option>
+              </select>
+            </Field>
             <Field label="Date">
               <input name="date" type="date" required />
             </Field>

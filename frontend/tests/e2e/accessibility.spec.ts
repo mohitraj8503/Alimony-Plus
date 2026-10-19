@@ -1,10 +1,13 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 test("workspace pages meet automated WCAG A/AA checks", async ({ page }) => {
+  test.setTimeout(90000);
   for (const route of [
     "dashboard",
     "cases",
+    "calendar",
     "orders",
+    "alerts",
     "payments",
     "documents",
     "calculator",

@@ -42,6 +42,12 @@ export type Hearing = {
   date: string;
   title: string;
   location: string;
+  type?: "hearing" | "summons";
+};
+export type Milestone = {
+  title: string;
+  date?: string;
+  detail?: string;
 };
 export type DocumentRecord = {
   id: number;
