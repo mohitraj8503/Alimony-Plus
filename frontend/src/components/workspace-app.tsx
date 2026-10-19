@@ -45,13 +45,14 @@ import {
   LoginView,
   SettingsView,
 } from "./workspace-extras";
-
+import { Form136View } from "./form-136";
 const nav = [
   { id: "dashboard", title: "Overview", icon: LayoutDashboard },
   { id: "cases", title: "My cases", icon: FolderHeart },
   { id: "orders", title: "Court orders", icon: Scale },
   { id: "payments", title: "Maintenance", icon: Wallet },
   { id: "documents", title: "Documents", icon: Files },
+  { id: "form-136", title: "Form 136", icon: Files },
   { id: "calculator", title: "Planning calculator", icon: Calculator },
 ];
 const pageTitles: Record<string, string> = {
@@ -61,6 +62,7 @@ const pageTitles: Record<string, string> = {
   payments: "Maintenance",
   documents: "Documents",
   calculator: "Planning calculator",
+  "form-136": "Form 136 – Financial Disclosure",
   "data-review": "Data workspace",
   help: "Help & legal aid",
   settings: "Settings",
@@ -1183,6 +1185,7 @@ export function WorkspaceApp({ section }: { section: string }) {
             </>
           )}
           {section === "calculator" && <CalculatorView />}
+          {section === "form-136" && <Form136View />}
           {section === "data-review" && (
             <DataReviewView
               onAdd={() => open("source")}

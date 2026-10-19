@@ -19,6 +19,7 @@ export default async function Page({
       "help",
       "settings",
       "login",
+      "form-136",
     ].includes(section)
   )
     notFound();

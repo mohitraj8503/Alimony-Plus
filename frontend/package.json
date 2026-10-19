@@ -12,6 +12,7 @@
     "format": "prettier --write src tests *.ts *.mjs *.json *.md"
   },
   "dependencies": {
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.53.0",
     "next": "^16.4.0",
     "react": "^19.3.0",

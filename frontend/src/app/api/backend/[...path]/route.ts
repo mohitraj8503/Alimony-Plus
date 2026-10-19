@@ -15,6 +15,7 @@ const allowed: Record<string, RegExp[]> = {
     /^(cases|proceedings|orders|payments)$/,
     /^documents\/upload$/,
     /^calculator\/run$/,
+    /^documents\/form-136\/pdf$/,
   ],
 };
 async function proxy(
