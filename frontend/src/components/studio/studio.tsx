@@ -12,6 +12,7 @@ import { AmountField, type SliderRange } from "./amount-field";
 import { type InputKey, getValue, setValue } from "./format";
 import { AssetChart, ComparisonChart } from "./charts";
 import { ComparisonTable, ResultCards } from "./results";
+import { Report } from "./report";
 
 const MAX_SCENARIOS = 3;
 
@@ -116,9 +117,9 @@ export function Studio() {
         ))}
       </Tabs.Root>
       {scenarios.length > 1 ? (
-        <><ComparisonTable scenarios={scenarios} /><ComparisonChart scenarios={scenarios} /></>
+        <><ComparisonTable scenarios={scenarios} /><ComparisonChart scenarios={scenarios} /><Report scenarios={scenarios} /></>
       ) : (
-        <p className="s-muted">Add a second scenario to compare outcomes side by side.</p>
+        <><p className="s-muted">Add a second scenario to compare outcomes side by side.</p><Report scenarios={scenarios} /></>
       )}
     </div>
   );
