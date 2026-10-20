@@ -10,6 +10,7 @@ import { validateInputs } from "@/lib/studio/schema";
 import type { Scenario } from "@/lib/studio/types";
 import { AmountField, type SliderRange } from "./amount-field";
 import { type InputKey, getValue, setValue } from "./format";
+import { AssetChart, ComparisonChart } from "./charts";
 import { ComparisonTable, ResultCards } from "./results";
 
 const MAX_SCENARIOS = 3;
@@ -57,7 +58,7 @@ function Panel({ scenario, onChange }: { scenario: Scenario; onChange: (next: Sc
         ))}
       </section>
       {check.ok ? (
-        <ResultCards scenario={scenario} />
+        <div><ResultCards scenario={scenario} /><AssetChart scenario={scenario} /></div>
       ) : (
         <section className="s-card" role="alert">
           <h2 className="s-h2">Results are paused</h2>
@@ -115,7 +116,7 @@ export function Studio() {
         ))}
       </Tabs.Root>
       {scenarios.length > 1 ? (
-        <ComparisonTable scenarios={scenarios} />
+        <><ComparisonTable scenarios={scenarios} /><ComparisonChart scenarios={scenarios} /></>
       ) : (
         <p className="s-muted">Add a second scenario to compare outcomes side by side.</p>
       )}

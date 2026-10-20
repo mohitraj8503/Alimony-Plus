@@ -42,3 +42,9 @@
 .s-table th, .s-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
 .s-table thead th { background: var(--green-light); }
 @media (prefers-reduced-motion: reduce) { .s-btn, .s-tab { transition: none; } }
+
+.s-chart { width: 100%; height: auto; display: block; }
+.s-chart text { font-size: 13px; fill: var(--ink); }
+.s-bar-green { fill: var(--green); }
+.s-bar-amber { fill: var(--amber); }
+.s-bar-muted { fill: var(--muted); }
