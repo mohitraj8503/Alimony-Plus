@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CnrLookup } from "./cnr-lookup";
+import { SettlementStudio } from "./settlement-studio";
 
 import {
   LayoutDashboard,
@@ -55,6 +56,7 @@ const nav = [
   { id: "payments", title: "Maintenance", icon: Wallet },
   { id: "documents", title: "Documents", icon: Files },
   { id: "calculator", title: "Planning calculator", icon: Calculator },
+  { id: "settlement-studio", title: "Settlement Studio", icon: SlidersHorizontal },
   { id: "cnr", title: "CNR Lookup", icon: Search },
 ];
 const pageTitles: Record<string, string> = {
@@ -64,6 +66,7 @@ const pageTitles: Record<string, string> = {
   payments: "Maintenance",
   documents: "Documents",
   calculator: "Planning calculator",
+  "settlement-studio": "Settlement Studio",
   cnr: "CNR Lookup",
   "data-review": "Data workspace",
   help: "Help & legal aid",
@@ -1187,6 +1190,7 @@ export function WorkspaceApp({ section }: { section: string }) {
             </>
           )}
           {section === "calculator" && <CalculatorView />}
+          {section === "settlement-studio" && <SettlementStudio />}
           {section === "cnr" && <CnrLookup />}
           {section === "data-review" && (
             <DataReviewView

@@ -12,6 +12,7 @@ const sections = [
   "payments",
   "documents",
   "calculator",
+  "settlement-studio",
   "data-review",
   "help",
   "settings",
