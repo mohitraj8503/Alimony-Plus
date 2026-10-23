@@ -433,8 +433,21 @@ export function WorkspaceApp({ section }: { section: string }) {
             </div>
           )}
           {store.loading && (
-            <div role="status" className="loading-strip">
-              Loading your case records…
+            <div
+              role="status"
+              aria-label="Loading your case records"
+              className="loading-skeleton"
+            >
+            <span className="skeleton-heading" aria-hidden="true" />
+            <div className="skeleton-grid" aria-hidden="true">
+            <div className="skeleton-card" />
+            <div className="skeleton-card" />
+            <div className="skeleton-card" />
+            </div>
+            <div className="skeleton-panel" aria-hidden="true" />
+            <span className="skeleton-sr-only">
+              Loading your case records...
+            </span>
             </div>
           )}
           {section === "dashboard" && (
