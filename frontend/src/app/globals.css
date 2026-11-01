@@ -3436,3 +3436,53 @@ fieldset.field legend {
     animation: none;
   }
 }
+/* Tablet responsiveness: scoped to tablet widths only */
+@media (min-width: 901px) and (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-middle,
+  .dashboard-bottom {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .main-content {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .main-content {
+    padding: 24px 22px 0;
+  }
+
+  .stats-grid,
+  .stats-grid.three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-middle,
+  .dashboard-bottom,
+  .case-grid,
+  .document-layout,
+  .calculator-layout,
+  .login-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .heading-actions {
+    max-width: none;
+    justify-content: flex-start;
+  }
+
+  .question-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
