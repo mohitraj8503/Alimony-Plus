@@ -42,10 +42,11 @@ export function calculateDemo(input: PlanningInputs): PlanningResult {
       input.housingCost +
       input.medicalCosts +
       input.educationCosts +
-      input.litigationCosts -
-      input.applicantIncome -
-      input.applicantAssetsIncome -
-      input.existingSupport,
+    input.litigationCosts +
+input.applicantLiabilities -
+input.applicantIncome -
+input.applicantAssetsIncome -
+input.existingSupport,
   );
   const capacity = Math.max(
     0,

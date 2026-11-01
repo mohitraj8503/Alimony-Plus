@@ -61,9 +61,10 @@ const calculatePlanning = (input) => {
         Number(childCosts) +
         Number(housingCost) +
         Number(medicalCosts) +
-        Number(educationCosts) +
-        Number(litigationCosts) -
-        Number(applicantIncome) -
+       Number(educationCosts) +
+Number(litigationCosts) +
+Number(applicantLiabilities) -
+Number(applicantIncome) -
         Number(applicantAssetsIncome) -
         Number(existingSupport);
 
